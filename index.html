@@ -13,7 +13,7 @@
     <!-- Visualization & Content Choices: 
         - Report Info: System components (MCP, SK, DAM) and interaction flow -> Goal: Organize/Relationships -> Presentation: Interactive diagram built with HTML/CSS -> Interaction: Clickable component blocks that filter detailed content -> Justification: Visually clarifies complex system interactions, promoting exploration over passive reading. Method: HTML/Tailwind.
         - Report Info: Analysis of missing technical components (API Gateway, etc.) -> Goal: Compare/Inform -> Presentation: Tabbed interface showing options in a comparison table and the final recommendation -> Interaction: User selects a component to view its details -> Justification: Structures the decision-making process, making it easy to compare alternatives and understand the rationale for the optimal choice. Method: Dynamic HTML with JS.
-        - Report Info: Implementation plan from MVP to full-fledged -> Goal: Change/Organize -> Presentation: Multi-column layout with team-specific task cards -> Interaction: Static display -> Justification: Provides a clear, granular breakdown of responsibilities for each project phase, mirroring familiar DevOps/Agile formats. Method: HTML/Tailwind.
+        - Report Info: Implementation plan from MVP to full-fledged -> Goal: Change/Organize -> Presentation: Multi-column layout with team-specific task cards and descriptive paragraphs for each phase -> Interaction: Static display -> Justification: Provides a clear, granular breakdown of responsibilities and product outcomes for each project phase. Method: HTML/Tailwind.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -140,7 +140,10 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <!-- MVP Column -->
                     <div class="space-y-6">
-                        <h3 class="text-xl font-bold text-center text-slate-800 border-b-2 pb-2 border-slate-200">MVP (Q1)</h3>
+                        <div class="text-center">
+                            <h3 class="text-xl font-bold text-slate-800 border-b-2 pb-2 border-slate-200">MVP (Q1)</h3>
+                            <p class="text-sm text-slate-600 mt-3 px-2 italic"><strong>Output:</strong> A functional, secure endpoint to validate the core integration with a trusted partner. This proves the end-to-end flow from an external agent to our internal AI works, establishing the foundation for future development.</p>
+                        </div>
                         <div class="bg-white p-6 rounded-lg shadow-sm space-y-4">
                             <h4 class="font-semibold text-lg flex items-center"><i class="fas fa-cogs mr-3 text-sky-600"></i>DevOps Team</h4>
                             <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
@@ -162,7 +165,10 @@
                     </div>
                     <!-- V1 Column -->
                     <div class="space-y-6">
-                        <h3 class="text-xl font-bold text-center text-slate-800 border-b-2 pb-2 border-slate-200">V1 - Hardening (Q2)</h3>
+                         <div class="text-center">
+                            <h3 class="text-xl font-bold text-slate-800 border-b-2 pb-2 border-slate-200">V1 - Hardening (Q2)</h3>
+                            <p class="text-sm text-slate-600 mt-3 px-2 italic"><strong>Output:</strong> A production-hardened, scalable, and resilient server ready for broader, controlled adoption. This version can reliably handle multiple partners concurrently, ensuring system stability and providing the necessary visibility for effective management.</p>
+                        </div>
                          <div class="bg-white p-6 rounded-lg shadow-sm space-y-4">
                             <h4 class="font-semibold text-lg flex items-center"><i class="fas fa-cogs mr-3 text-sky-600"></i>DevOps Team</h4>
                             <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
@@ -182,7 +188,10 @@
                     </div>
                     <!-- V2 Column -->
                     <div class="space-y-6">
-                        <h3 class="text-xl font-bold text-center text-slate-800 border-b-2 pb-2 border-slate-200">V2 - Full-Fledged (Q3)</h3>
+                         <div class="text-center">
+                            <h3 class="text-xl font-bold text-slate-800 border-b-2 pb-2 border-slate-200">V2 - Full-Fledged (Q3)</h3>
+                             <p class="text-sm text-slate-600 mt-3 px-2 italic"><strong>Output:</strong> An enterprise-ready, self-service, and fully governed product offering. This version allows partners to dynamically discover all capabilities and provides our admins with a UI to monitor the ecosystem, transforming the feature into a scalable, marketable asset.</p>
+                        </div>
                          <div class="bg-white p-6 rounded-lg shadow-sm space-y-4">
                             <h4 class="font-semibold text-lg flex items-center"><i class="fas fa-cogs mr-3 text-sky-600"></i>DevOps Team</h4>
                             <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
