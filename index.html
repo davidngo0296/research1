@@ -9,13 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chosen Palette: Slate & Sky Blue -->
-    <!-- Application Structure Plan: The application is structured into four main, navigable tabs: 'Overview', 'Solution Architecture', 'Implementation Plan', and 'Product Backlog'. This thematic structure was chosen over a linear document format to allow users to explore the plan based on their interests. A user can start with the high-level business case ('Overview'), visually understand the system's components and their interactions ('Solution Architecture'), see the phased rollout ('Implementation Plan'), and then review the specific tasks ('Product Backlog'). The core interaction revolves around the 'Solution Architecture' diagram, where clicking a component dynamically filters the detailed analysis, creating an intuitive drill-down experience. This non-linear, task-oriented flow enhances comprehension of a complex technical plan. -->
+    <!-- Application Structure Plan: The application is now focused on two key areas, accessible via tabs: 'Solution Architecture' and 'Implementation Plan'. This streamlined structure allows technical stakeholders to directly access the component breakdown, technology choices, and the phased, team-based rollout plan without introductory or backlog details. The core interaction remains the 'Solution Architecture' diagram, where clicking a component dynamically filters the detailed analysis, creating an intuitive drill-down experience for deep technical exploration. -->
     <!-- Visualization & Content Choices: 
-        - Report Info: High-level problem and business justification -> Goal: Inform -> Presentation: Key summary cards -> Interaction: Static display -> Justification: Quickly provides context and value proposition.
         - Report Info: System components (MCP, SK, DAM) and interaction flow -> Goal: Organize/Relationships -> Presentation: Interactive diagram built with HTML/CSS -> Interaction: Clickable component blocks that filter detailed content -> Justification: Visually clarifies complex system interactions, promoting exploration over passive reading. Method: HTML/Tailwind.
         - Report Info: Analysis of missing technical components (API Gateway, etc.) -> Goal: Compare/Inform -> Presentation: Tabbed interface showing options in a comparison table and the final recommendation -> Interaction: User selects a component to view its details -> Justification: Structures the decision-making process, making it easy to compare alternatives and understand the rationale for the optimal choice. Method: Dynamic HTML with JS.
         - Report Info: Implementation plan from MVP to full-fledged -> Goal: Change/Organize -> Presentation: Multi-column layout with team-specific task cards -> Interaction: Static display -> Justification: Provides a clear, granular breakdown of responsibilities for each project phase, mirroring familiar DevOps/Agile formats. Method: HTML/Tailwind.
-        - Report Info: Product Backlog -> Goal: Organize -> Presentation: A structured list grouped by project phase -> Interaction: Static display with clear categorization -> Justification: Aligns the backlog directly with the implementation timeline, making it easy to see what work is required for each release. Method: HTML/Tailwind.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -68,48 +66,17 @@
         <nav class="mb-8 border-b border-slate-200">
             <ul class="flex flex-wrap -mb-px justify-center text-sm font-medium text-center" id="main-tabs">
                 <li class="mr-2">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-active" data-tab="overview">Overview</button>
-                </li>
-                <li class="mr-2">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-inactive" data-tab="architecture">Solution Architecture</button>
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-active" data-tab="architecture">Solution Architecture</button>
                 </li>
                  <li class="mr-2">
                     <button class="inline-block p-4 border-b-2 rounded-t-lg tab-inactive" data-tab="plan">Implementation Plan</button>
-                </li>
-                <li>
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-inactive" data-tab="backlog">Product Backlog</button>
                 </li>
             </ul>
         </nav>
 
         <main id="main-content">
-            <!-- Overview Section -->
-            <section id="overview" class="space-y-8">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-900 mb-4">Problem Statement</h2>
-                    <p class="text-slate-700 leading-relaxed bg-white p-6 rounded-lg shadow-sm">Our DAM platform must provide an MCP (Media Creation Professional) server so that external AI agents, such as customer chatbots and partner copilots, can securely discover and query DAM-governed resources like help documents, brand assets, and more. This integration must align with our internal Semantic Kernel (SK) framework, enabling SK-based agents to seamlessly call MCP tools.</p>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-900 mb-4">Business Justification</h2>
-                     <div class="grid md:grid-cols-3 gap-6">
-                        <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="font-semibold text-lg mb-2 text-sky-600">Strengthen Source of Truth</h3>
-                            <p class="text-slate-600">Extend governed DAM content directly into customer and partner AI ecosystems, reinforcing our platform's central role.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="font-semibold text-lg mb-2 text-sky-600">Differentiate from Competitors</h3>
-                            <p class="text-slate-600">Early adoption of MCP servers positions us as a forward-looking leader in enterprise AI integration.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="font-semibold text-lg mb-2 text-sky-600">Future-Proof Integrations</h3>
-                            <p class="text-slate-600">MCP provides a standardized "USB-C port" for AI, reducing long-term integration costs and accelerating time-to-market.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <!-- Architecture Section -->
-            <section id="architecture" class="hidden space-y-8">
+            <section id="architecture" class="space-y-8">
                  <div>
                     <h2 class="text-2xl font-bold text-slate-900 mb-2">Interactive Architecture Diagram</h2>
                     <p class="text-slate-600 mb-6 max-w-3xl mx-auto text-center">This diagram illustrates the key components and the flow of information for the MCP server. The 'brains' of the orchestration are handled by the internal Semantic Kernel. Click on the highlighted components (API Gateway, Authentication, and Messaging Bus) to see a detailed analysis of our technology choices for the missing pieces required to build the server.</p>
@@ -238,80 +205,6 @@
                                 <li>Build admin UI to view MCP usage logs.</li>
                                 <li>Connect UI to backend telemetry APIs.</li>
                             </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Backlog Section -->
-            <section id="backlog" class="hidden space-y-8">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Product Backlog by Version</h2>
-                    <p class="text-slate-600 mb-6">This backlog is structured by release version, aligning development tasks with the implementation plan.</p>
-                </div>
-                <div class="space-y-8">
-                    <!-- MVP Backlog -->
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-slate-200">MVP Backlog (Q1)</h3>
-                        <div class="space-y-4">
-                            <div class="p-4 bg-white rounded-lg shadow-sm">
-                                <h4 class="font-bold text-lg">Epic: Core MCP Server Infrastructure</h4>
-                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
-                                    <li>User Story: As a developer, I want to set up a basic API Gateway to route external requests to the MCP server.</li>
-                                    <li>User Story: As a developer, I want to implement OIDC token validation to secure the MCP endpoints.</li>
-                                </ul>
-                            </div>
-                             <div class="p-4 bg-white rounded-lg shadow-sm">
-                                <h4 class="font-bold text-lg">Epic: Tool Discovery and Invocation</h4>
-                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
-                                    <li>User Story: As an external agent, I can call a `discover` endpoint to get a static schema of available DAM tools.</li>
-                                    <li>User Story: As an external agent, I can call an `invoke` endpoint to synchronously execute a tool.</li>
-                                    <li>Task: Implement basic request/response logging.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- V1 Backlog -->
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-slate-200">V1 - Hardening Backlog (Q2)</h3>
-                        <div class="space-y-4">
-                            <div class="p-4 bg-white rounded-lg shadow-sm">
-                                <h4 class="font-bold text-lg">Epic: Hardened Infrastructure</h4>
-                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
-                                    <li>User Story: As a developer, I want to configure rate limiting and request logging at the gateway level.</li>
-                                    <li>Task: Set up Azure Service Bus for asynchronous communication.</li>
-                                </ul>
-                            </div>
-                             <div class="p-4 bg-white rounded-lg shadow-sm">
-                                <h4 class="font-bold text-lg">Epic: Asynchronous Tool Invocation</h4>
-                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
-                                    <li>User Story: As a developer, I want to refactor the `invoke` endpoint to publish messages to a service bus for resilience.</li>
-                                    <li>User Story: As a developer, I want to create a background processor to handle SK invocations from the message queue.</li>
-                                    <li>Task: Implement correlation IDs for end-to-end request tracing.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- V2 Backlog -->
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-slate-200">V2 - Full-Fledged Backlog (Q3)</h3>
-                        <div class="space-y-4">
-                            <div class="p-4 bg-white rounded-lg shadow-sm">
-                                <h4 class="font-bold text-lg">Epic: Advanced Governance and Features</h4>
-                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
-                                    <li>User Story: As an admin, I want to view detailed logs of all MCP tool invocations, including tenant and arguments.</li>
-                                    <li>User Story: As an external agent, I want the `/discover` endpoint to be dynamic and always show the latest available tools.</li>
-                                    <li>User Story: As a developer, I want to implement robust error handling and standardized error responses.</li>
-                                    <li>Task: Integrate with the central telemetry system to pipe logs and metrics.</li>
-                                </ul>
-                            </div>
-                             <div class="p-4 bg-white rounded-lg shadow-sm">
-                                <h4 class="font-bold text-lg">Epic: Admin Experience</h4>
-                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
-                                    <li>User Story: As an admin, I want a UI inside the DAM to view MCP usage analytics and logs.</li>
-                                    <li>Task: Build backend APIs to serve telemetry data to the new admin UI.</li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>
