@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Server: Interactive Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chosen Palette: Slate & Sky Blue -->
+    <!-- Application Structure Plan: The application is structured into four main, navigable tabs: 'Overview', 'Solution Architecture', 'Implementation Plan', and 'Product Backlog'. This thematic structure was chosen over a linear document format to allow users to explore the plan based on their interests. A user can start with the high-level business case ('Overview'), visually understand the system's components and their interactions ('Solution Architecture'), see the phased rollout ('Implementation Plan'), and then review the specific tasks ('Product Backlog'). The core interaction revolves around the 'Solution Architecture' diagram, where clicking a component dynamically filters the detailed analysis, creating an intuitive drill-down experience. This non-linear, task-oriented flow enhances comprehension of a complex technical plan. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: High-level problem and business justification -> Goal: Inform -> Presentation: Key summary cards -> Interaction: Static display -> Justification: Quickly provides context and value proposition.
+        - Report Info: System components (MCP, SK, DAM) and interaction flow -> Goal: Organize/Relationships -> Presentation: Interactive diagram built with HTML/CSS -> Interaction: Clickable component blocks that filter detailed content -> Justification: Visually clarifies complex system interactions, promoting exploration over passive reading. Method: HTML/Tailwind.
+        - Report Info: Analysis of missing technical components (API Gateway, etc.) -> Goal: Compare/Inform -> Presentation: Tabbed interface showing options in a comparison table and the final recommendation -> Interaction: User selects a component to view its details -> Justification: Structures the decision-making process, making it easy to compare alternatives and understand the rationale for the optimal choice. Method: Dynamic HTML with JS.
+        - Report Info: Implementation plan from MVP to full-fledged -> Goal: Change/Organize -> Presentation: Multi-column layout with team-specific task cards -> Interaction: Static display -> Justification: Provides a clear, granular breakdown of responsibilities for each project phase, mirroring familiar DevOps/Agile formats. Method: HTML/Tailwind.
+        - Report Info: Product Backlog -> Goal: Organize -> Presentation: A structured list grouped by project phase -> Interaction: Static display with clear categorization -> Justification: Aligns the backlog directly with the implementation timeline, making it easy to see what work is required for each release. Method: HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .tab-active {
+            border-color: #0ea5e9; /* sky-500 */
+            color: #0ea5e9; /* sky-500 */
+            background-color: #f0f9ff; /* sky-50 */
+        }
+        .tab-inactive {
+            border-color: transparent;
+            color: #475569; /* slate-600 */
+        }
+        .component-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .component-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .flow-arrow {
+            position: relative;
+            background-color: #cbd5e1; /* slate-300 */
+            height: 2px;
+        }
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            right: -1px;
+            top: -4px;
+            border-left: 8px solid #cbd5e1; /* slate-300 */
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-slate-900">Externally Available MCP Server</h1>
+            <p class="mt-2 text-lg text-slate-600">An Interactive Technical Plan & Roadmap</p>
+        </header>
+
+        <nav class="mb-8 border-b border-slate-200">
+            <ul class="flex flex-wrap -mb-px justify-center text-sm font-medium text-center" id="main-tabs">
+                <li class="mr-2">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-active" data-tab="overview">Overview</button>
+                </li>
+                <li class="mr-2">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-inactive" data-tab="architecture">Solution Architecture</button>
+                </li>
+                 <li class="mr-2">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-inactive" data-tab="plan">Implementation Plan</button>
+                </li>
+                <li>
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-inactive" data-tab="backlog">Product Backlog</button>
+                </li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            <!-- Overview Section -->
+            <section id="overview" class="space-y-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">Problem Statement</h2>
+                    <p class="text-slate-700 leading-relaxed bg-white p-6 rounded-lg shadow-sm">Our DAM platform must provide an MCP (Media Creation Professional) server so that external AI agents, such as customer chatbots and partner copilots, can securely discover and query DAM-governed resources like help documents, brand assets, and more. This integration must align with our internal Semantic Kernel (SK) framework, enabling SK-based agents to seamlessly call MCP tools.</p>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">Business Justification</h2>
+                     <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h3 class="font-semibold text-lg mb-2 text-sky-600">Strengthen Source of Truth</h3>
+                            <p class="text-slate-600">Extend governed DAM content directly into customer and partner AI ecosystems, reinforcing our platform's central role.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h3 class="font-semibold text-lg mb-2 text-sky-600">Differentiate from Competitors</h3>
+                            <p class="text-slate-600">Early adoption of MCP servers positions us as a forward-looking leader in enterprise AI integration.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h3 class="font-semibold text-lg mb-2 text-sky-600">Future-Proof Integrations</h3>
+                            <p class="text-slate-600">MCP provides a standardized "USB-C port" for AI, reducing long-term integration costs and accelerating time-to-market.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architecture Section -->
+            <section id="architecture" class="hidden space-y-8">
+                 <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Interactive Architecture Diagram</h2>
+                    <p class="text-slate-600 mb-6 max-w-3xl mx-auto text-center">This diagram illustrates the key components and the flow of information for the MCP server. The 'brains' of the orchestration are handled by the internal Semantic Kernel. Click on the highlighted components (API Gateway, Authentication, and Messaging Bus) to see a detailed analysis of our technology choices for the missing pieces required to build the server.</p>
+                </div>
+
+                <div class="p-6 bg-white rounded-lg shadow-sm">
+                    <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                        <div class="text-center p-4 border-2 border-dashed border-slate-300 rounded-lg">
+                            <h4 class="font-bold">External Agent</h4>
+                            <p class="text-sm text-slate-500">(e.g., Chatbot)</p>
+                        </div>
+                        <div class="w-full md:w-16 flex items-center justify-center">
+                            <div class="flow-arrow w-full"></div>
+                        </div>
+                        <!-- MCP Server Wrapper -->
+                        <div class="border-2 border-sky-500 rounded-lg p-4 w-full md:w-auto">
+                            <h3 class="text-center font-bold text-sky-600 mb-4">MCP Server</h3>
+                            <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+                                <div id="arch-api-gateway" class="component-card text-center p-4 bg-sky-50 border border-sky-200 rounded-lg w-full md:w-40">
+                                    <h4 class="font-bold">API Gateway</h4>
+                                    <p class="text-sm text-slate-500">(New Component)</p>
+                                </div>
+                                <div id="arch-authentication" class="component-card text-center p-4 bg-sky-50 border border-sky-200 rounded-lg w-full md:w-40">
+                                    <h4 class="font-bold">Authentication</h4>
+                                    <p class="text-sm text-slate-500">(New Component)</p>
+                                </div>
+                                <div class="text-center p-4 bg-slate-100 border border-slate-200 rounded-lg w-full md:w-40">
+                                    <h4 class="font-bold">Semantic Kernel</h4>
+                                    <p class="text-sm text-slate-500">(Existing)</p>
+                                </div>
+                                 <div id="arch-messaging-bus" class="component-card text-center p-4 bg-sky-50 border border-sky-200 rounded-lg w-full md:w-40">
+                                    <h4 class="font-bold">Messaging Bus</h4>
+                                    <p class="text-sm text-slate-500">(New Component)</p>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="w-full md:w-16 flex items-center justify-center">
+                            <div class="flow-arrow w-full"></div>
+                        </div>
+                         <div class="text-center p-4 bg-slate-100 border border-slate-200 rounded-lg">
+                            <h4 class="font-bold">DAM</h4>
+                            <p class="text-sm text-slate-500">(Existing)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="component-details" class="hidden mt-8">
+                     <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-4" id="component-title"></h2>
+                        <div id="component-content" class="space-y-4"></div>
+                     </div>
+                </div>
+            </section>
+
+            <!-- Plan Section -->
+            <section id="plan" class="hidden space-y-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Detailed Implementation Plan</h2>
+                    <p class="text-slate-600 mb-6">This plan outlines a phased, team-based approach to building the MCP server, from a Minimum Viable Product to a full-fledged solution.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- MVP Column -->
+                    <div class="space-y-6">
+                        <h3 class="text-xl font-bold text-center text-slate-800 border-b-2 pb-2 border-slate-200">MVP (Q1)</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-sm space-y-4">
+                            <h4 class="font-semibold text-lg flex items-center"><i class="fas fa-cogs mr-3 text-sky-600"></i>DevOps Team</h4>
+                            <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
+                                <li>Setup initial Azure API Management instance.</li>
+                                <li>Configure basic routing to MCP service.</li>
+                                <li>Setup Azure AD App Registration for auth.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm space-y-4">
+                            <h4 class="font-semibold text-lg flex items-center"><i class="fas fa-server mr-3 text-sky-600"></i>DAM Backend Team</h4>
+                             <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
+                                <li>Develop core MCP service host.</li>
+                                <li>Implement OIDC token validation.</li>
+                                <li>Create static `/discover` endpoint.</li>
+                                <li>Create `/invoke` endpoint with synchronous, in-process calls to Semantic Kernel.</li>
+                                <li>Implement basic request/response logging.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- V1 Column -->
+                    <div class="space-y-6">
+                        <h3 class="text-xl font-bold text-center text-slate-800 border-b-2 pb-2 border-slate-200">V1 - Hardening (Q2)</h3>
+                         <div class="bg-white p-6 rounded-lg shadow-sm space-y-4">
+                            <h4 class="font-semibold text-lg flex items-center"><i class="fas fa-cogs mr-3 text-sky-600"></i>DevOps Team</h4>
+                            <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
+                                <li>Configure rate limiting in API Management.</li>
+                                <li>Setup Azure Service Bus for messaging.</li>
+                                <li>Integrate gateway logs with Log Analytics.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm space-y-4">
+                            <h4 class="font-semibold text-lg flex items-center"><i class="fas fa-server mr-3 text-sky-600"></i>DAM Backend Team</h4>
+                             <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
+                                <li>Refactor `/invoke` to be asynchronous using Azure Service Bus.</li>
+                                <li>Create background service (Azure Function) to process queued SK calls.</li>
+                                <li>Implement correlation IDs for end-to-end request tracing.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- V2 Column -->
+                    <div class="space-y-6">
+                        <h3 class="text-xl font-bold text-center text-slate-800 border-b-2 pb-2 border-slate-200">V2 - Full-Fledged (Q3)</h3>
+                         <div class="bg-white p-6 rounded-lg shadow-sm space-y-4">
+                            <h4 class="font-semibold text-lg flex items-center"><i class="fas fa-cogs mr-3 text-sky-600"></i>DevOps Team</h4>
+                            <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
+                                <li>Implement advanced security policies in APIM.</li>
+                                <li>Setup monitoring and alerting dashboards.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm space-y-4">
+                            <h4 class="font-semibold text-lg flex items-center"><i class="fas fa-server mr-3 text-sky-600"></i>DAM Backend Team</h4>
+                             <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
+                                <li>Make `/discover` endpoint dynamic.</li>
+                                <li>Implement result streaming for long-running tool invocations.</li>
+                                <li>Develop comprehensive telemetry system.</li>
+                                <li>Implement standardized error handling.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm space-y-4">
+                            <h4 class="font-semibold text-lg flex items-center"><i class="fas fa-desktop mr-3 text-sky-600"></i>DAM Frontend Team</h4>
+                             <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
+                                <li>Build admin UI to view MCP usage logs.</li>
+                                <li>Connect UI to backend telemetry APIs.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Backlog Section -->
+            <section id="backlog" class="hidden space-y-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Product Backlog by Version</h2>
+                    <p class="text-slate-600 mb-6">This backlog is structured by release version, aligning development tasks with the implementation plan.</p>
+                </div>
+                <div class="space-y-8">
+                    <!-- MVP Backlog -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-slate-200">MVP Backlog (Q1)</h3>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-white rounded-lg shadow-sm">
+                                <h4 class="font-bold text-lg">Epic: Core MCP Server Infrastructure</h4>
+                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
+                                    <li>User Story: As a developer, I want to set up a basic API Gateway to route external requests to the MCP server.</li>
+                                    <li>User Story: As a developer, I want to implement OIDC token validation to secure the MCP endpoints.</li>
+                                </ul>
+                            </div>
+                             <div class="p-4 bg-white rounded-lg shadow-sm">
+                                <h4 class="font-bold text-lg">Epic: Tool Discovery and Invocation</h4>
+                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
+                                    <li>User Story: As an external agent, I can call a `discover` endpoint to get a static schema of available DAM tools.</li>
+                                    <li>User Story: As an external agent, I can call an `invoke` endpoint to synchronously execute a tool.</li>
+                                    <li>Task: Implement basic request/response logging.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- V1 Backlog -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-slate-200">V1 - Hardening Backlog (Q2)</h3>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-white rounded-lg shadow-sm">
+                                <h4 class="font-bold text-lg">Epic: Hardened Infrastructure</h4>
+                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
+                                    <li>User Story: As a developer, I want to configure rate limiting and request logging at the gateway level.</li>
+                                    <li>Task: Set up Azure Service Bus for asynchronous communication.</li>
+                                </ul>
+                            </div>
+                             <div class="p-4 bg-white rounded-lg shadow-sm">
+                                <h4 class="font-bold text-lg">Epic: Asynchronous Tool Invocation</h4>
+                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
+                                    <li>User Story: As a developer, I want to refactor the `invoke` endpoint to publish messages to a service bus for resilience.</li>
+                                    <li>User Story: As a developer, I want to create a background processor to handle SK invocations from the message queue.</li>
+                                    <li>Task: Implement correlation IDs for end-to-end request tracing.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- V2 Backlog -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-slate-200">V2 - Full-Fledged Backlog (Q3)</h3>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-white rounded-lg shadow-sm">
+                                <h4 class="font-bold text-lg">Epic: Advanced Governance and Features</h4>
+                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
+                                    <li>User Story: As an admin, I want to view detailed logs of all MCP tool invocations, including tenant and arguments.</li>
+                                    <li>User Story: As an external agent, I want the `/discover` endpoint to be dynamic and always show the latest available tools.</li>
+                                    <li>User Story: As a developer, I want to implement robust error handling and standardized error responses.</li>
+                                    <li>Task: Integrate with the central telemetry system to pipe logs and metrics.</li>
+                                </ul>
+                            </div>
+                             <div class="p-4 bg-white rounded-lg shadow-sm">
+                                <h4 class="font-bold text-lg">Epic: Admin Experience</h4>
+                                <ul class="list-disc list-inside text-slate-600 mt-2 space-y-1">
+                                    <li>User Story: As an admin, I want a UI inside the DAM to view MCP usage analytics and logs.</li>
+                                    <li>Task: Build backend APIs to serve telemetry data to the new admin UI.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('#main-tabs button');
+        const sections = document.querySelectorAll('#main-content section');
+        const archComponents = document.querySelectorAll('.component-card');
+        const componentDetailsContainer = document.getElementById('component-details');
+
+        const componentData = {
+            'api-gateway': {
+                title: 'Component Deep Dive: API Gateway',
+                content: `
+                    <p class="mb-4">The API Gateway is the front door for all external requests. It's responsible for routing, rate limiting, logging, and applying initial security policies before requests reach the core application logic.</p>
+                    <h4 class="font-bold mb-2">Available Options</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-500">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                <tr><th class="px-6 py-3">Option</th><th class="px-6 py-3">Pros</th><th class="px-6 py-3">Cons</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b"><td class="px-6 py-4 font-medium">Azure API Management</td><td class="px-6 py-4">Deep integration with Azure services; excellent policy engine.</td><td class="px-6 py-4">Higher cost; potential vendor lock-in.</td></tr>
+                                <tr class="bg-white border-b"><td class="px-6 py-4 font-medium">Kong Gateway</td><td class="px-6 py-4">Open-source, flexible, and feature-rich.</td><td class="px-6 py-4">Requires more operational overhead for management.</td></tr>
+                                <tr class="bg-white"><td class="px-6 py-4 font-medium">NGINX Plus</td><td class="px-6 py-4">High performance and reliability.</td><td class="px-6 py-4">Less focused on API-specific features compared to others.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4 class="font-bold mt-6 mb-2 text-sky-600">Optimal Option: Azure API Management</h4>
+                    <p>Given our existing infrastructure is heavily based on Azure, using Azure API Management is the optimal choice. It offers seamless integration with our authentication providers, logging systems, and compute services. This reduces operational complexity and allows us to leverage existing expertise, accelerating development and ensuring a secure, scalable entry point for our MCP server.</p>
+                `
+            },
+            'authentication': {
+                title: 'Component Deep Dive: Authentication',
+                content: `
+                    <p class="mb-4">This component handles the security of the MCP server, ensuring that only authorized external agents can access it. It validates tokens and resolves tenancy and permissions (scopes) for each request.</p>
+                    <h4 class="font-bold mb-2">Available Options</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-500">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                <tr><th class="px-6 py-3">Option</th><th class="px-6 py-3">Pros</th><th class="px-6 py-3">Cons</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b"><td class="px-6 py-4 font-medium">Azure AD (Entra ID)</td><td class="px-6 py-4">Fully integrated with our Azure stack; robust OIDC/OAuth2 support.</td><td class="px-6 py-4">Tightly coupled with Microsoft ecosystem.</td></tr>
+                                <tr class="bg-white border-b"><td class="px-6 py-4 font-medium">Auth0</td><td class="px-6 py-4">Excellent developer experience and flexibility.</td><td class="px-6 py-4">Third-party dependency; can be costly at scale.</td></tr>
+                                <tr class="bg-white"><td class="px-6 py-4 font-medium">Keycloak</td><td class="px-6 py-4">Open-source and self-hostable, offering full control.</td><td class="px-6 py-4">Requires significant maintenance and infrastructure.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4 class="font-bold mt-6 mb-2 text-sky-600">Optimal Option: Azure AD (Entra ID)</h4>
+                    <p>Leveraging Azure AD is the most strategic choice. It allows us to manage identities and access policies in the same place as our other enterprise applications. Its native integration with Azure API Management simplifies the process of securing endpoints with OAuth2/OIDC, ensuring that we can enforce tenant-level permissions consistently and reliably.</p>
+                `
+            },
+            'messaging-bus': {
+                title: 'Component Deep Dive: Messaging Bus',
+                content: `
+                     <p class="mb-4">The Messaging Bus provides an asynchronous communication channel between the MCP server and the internal Semantic Kernel. This decouples the components, improving resilience and scalability. The MCP server can publish an "action" message, and SK can process it without requiring a direct, synchronous connection.</p>
+                    <h4 class="font-bold mb-2">Available Options</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-500">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                <tr><th class="px-6 py-3">Option</th><th class="px-6 py-3">Pros</th><th class="px-6 py-3">Cons</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b"><td class="px-6 py-4 font-medium">Azure Service Bus</td><td class="px-6 py-4">Reliable, fully managed, and integrates well with Azure Functions/Apps.</td><td class="px-6 py-4">Can be more expensive than other options.</td></tr>
+                                <tr class="bg-white border-b"><td class="px-6 py-4 font-medium">RabbitMQ</td><td class="px-6 py-4">Highly flexible, supports multiple messaging protocols.</td><td class="px-6 py-4">Requires self-hosting and management.</td></tr>
+                                <tr class="bg-white"><td class="px-6 py-4 font-medium">In-Process Call</td><td class="px-6 py-4">Simplest option, no external dependency.</td><td class="px-6 py-4">Tightly couples the MCP and SK; less scalable and resilient.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4 class="font-bold mt-6 mb-2 text-sky-600">Optimal Option: Azure Service Bus</h4>
+                    <p>For a robust, full-fledged solution, Azure Service Bus is the best choice. It provides the necessary decoupling to ensure the system is scalable and resilient. While an in-process call is suitable for the MVP to speed up initial development, adopting a message bus like Azure Service Bus will be critical for handling increased load and ensuring that failures in one component do not cascade to others in the production environment.</p>
+                `
+            }
+        };
+        
+        function switchTab(tab) {
+            tabs.forEach(t => {
+                t.classList.remove('tab-active');
+                t.classList.add('tab-inactive');
+            });
+            tab.classList.add('tab-active');
+            tab.classList.remove('tab-inactive');
+
+            sections.forEach(s => {
+                s.classList.add('hidden');
+            });
+            document.getElementById(tab.dataset.tab).classList.remove('hidden');
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => switchTab(tab));
+        });
+
+        function showComponentDetails(componentId) {
+            const data = componentData[componentId];
+            if (!data) return;
+            
+            document.getElementById('component-title').textContent = data.title;
+            document.getElementById('component-content').innerHTML = data.content;
+            componentDetailsContainer.classList.remove('hidden');
+            componentDetailsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        archComponents.forEach(comp => {
+            comp.addEventListener('click', () => {
+                const componentId = comp.id.replace('arch-', '');
+                showComponentDetails(componentId);
+            });
+        });
+    </script>
+</body>
+</html>
+
